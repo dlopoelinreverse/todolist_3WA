@@ -1,33 +1,51 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
+import TodoTitle from './TodoTitle'
 
-const reducer = (state, action) => {
-    switch(action.type) {
-        case 'editing':
-            console.log("edit");
-            return {
-                ...state,
-                isEditing: true
-            }
-            default:
-                return state
-    }
-}
+// const reducer = (state, action) => {
+//     switch(action.type) {
+//         case "completed" : 
+//             return {
+//                 ...state,
+//                 isCompleted: true,
+//             }
+//         case "cancelComplete": 
+//         return {
+//             ...state,
+//             isCompleted: false,
+//         }
+//         case 'editing':
+//             return {
+//                 ...state,
+//                 isEditing: true,
+//                 isCompleted: false,
+//             }
+//             default:
+//                 return state
+//     }
+// }
 
 export default function TodoItem({todo}) {
-    // const initialState = todo
-
-
-    const [state, dispatch] = useReducer(reducer, todo)
-    const handleDoubleClick = (e) => {
-        dispatch({type: 'editing'})
+    // const [state, dispatch] = useReducer(reducer, todo)
+    const [completed, setCommpleted] = useState(todo.isCompleted)
+    const handleComplete = (e) => {
+        const {checked} = e.target
+        if (checked) setCommpleted(true)
+        else setCommpleted(false)
+        // if (checked) dispatch({type : "completed"})
+        // else dispatch({type: "cancelComplete"})
     }
-    useEffect(() => {
-        console.log("Todo update");
-    }, [state])
+    // const handleDoubleClick = (e) => {
+    //     dispatch({type: 'editing'})
+    // }
+    // useEffect(() => {
+    //     console.log("Todo update");
+    // }, [state])
   return (
-    <div className="todo-item-container">
-        <h2 onDoubleClick={handleDoubleClick}>{todo.title}</h2>
-        {state.isEditing ? (<h4>Edit</h4>): (<h4>Not edit</h4>)}
-    </div>
+    <>        
+        <input type="checkbox" onChange={handleComplete}/>
+        {/* {state.isCompleted ? <h2 onDoubleClick={handleDoubleClick}>{todo.title}</h2> : <h2 onDoubleClick={handleDoubleClick}>{todo.title}</h2>} */}
+        <TodoTitle title={todo.title} completed={completed} />
+        {/* {state.isEditing ? (<h4>Edit</h4>): (<h4>Not edit</h4>)} */}
+    </>
   )
 }

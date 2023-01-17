@@ -30,7 +30,7 @@ import TodoList from "./TodoList";
 //   }
 // }
 
-const TodoInput = () => {
+const TodoInput = ({type}) => {
     // const [todosReducer, dispatch] = useReducer(reducer, initialState);
     const [inputTitle, setInputTitle] = useState("")
     const dispatch = useDispatch()

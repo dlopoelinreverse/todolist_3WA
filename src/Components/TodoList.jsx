@@ -7,6 +7,8 @@ export default function TodoList(
     // {todos}
     ) {
     const todos = useSelector(state => state.todos.todos)
+    const filter = useSelector(state => state.filter)
+    const [filteredTodos, setFilteredTodos] = useState([])
     
 
     // const [todosList, setTodosList] = useState([]);
@@ -19,14 +21,29 @@ export default function TodoList(
     //     setTodosList(list.filter(todo => todo.id !== parseInt(e.target.id)));
        
     // }
-    // useEffect(() => {
-    //     setTodosList(todos)
-    // }, [todos])
+    useEffect(() => {
+      
+        
+          switch(filter.filter) {
+            case "reset":
+              return setFilteredTodos(todos)
+            case "completed":
+            return setFilteredTodos(todos.filter(todo => todo.isCompleted === true))
+            case "!completed":
+            return setFilteredTodos(todos.filter(todo => todo.isCompleted === false))
+            // ou juste balancer un filterType true/false dans le state et recupérer puis filtrer les todos par celui-ci simplement un if pour la remise a zero des filtre
+            default:
+              return todos        
+        }
+    }, [todos, filter])
 
   return (
     <div className="todo-list-container">
         <ul className='todos-container'>
-            {todos && todos.map(todo => <TodoItemReducer key={todo.id} todo={todo} />)}
+            {filteredTodos && filteredTodos.map(todo => <TodoItemReducer key={todo.id}
+             todo={todo} 
+            // {...todo}
+             />)}
 
         {/* {todosList && todosList.map(todo => (
             // <>

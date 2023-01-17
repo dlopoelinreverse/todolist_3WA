@@ -3,6 +3,7 @@ import { current } from "@reduxjs/toolkit";
 const initialState = {
   todos: [],
   id: 1,
+  filter: undefined,
 };
 
 export const todoListSlice = createSlice({
@@ -21,21 +22,43 @@ export const todoListSlice = createSlice({
     },
     handleComplete: (state, action) => {
       const todoToTouch = state.todos.find(
+        (todo) => todo.id === action.payload.id
+      );
+      if (todoToTouch) todoToTouch.isCompleted = action.payload.checked;
+    },
+    setEdit: (state, action) => {
+      const todoToTouch = state.todos.find(
         (todo) => todo.id === action.payload
       );
-      if (todoToTouch) todoToTouch.isCompleted = !todoToTouch.isCompleted;
-      // todoToTouch.isCompleted = !todoToTouch.isCompleted;
+      if (todoToTouch) todoToTouch.isEditing = !todoToTouch.isEditing;
     },
-    // decrement: (state) => {
-    //   state.value -= 1
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload
-    // },
+    handleEdit: (state, action) => {
+      const todoToTouch = state.todos.find(
+        (todo) => todo.id === action.payload.id
+      );
+      if (todoToTouch) {
+        todoToTouch.title = action.payload.newTitle;
+        todoToTouch.isCompleted = false;
+        todoToTouch.isEditing = false;
+      }
+    },
+    removeCompletedTodos: (state, action) => {
+      state.todos = state.todos.filter(
+        (todo) =>
+          // !action.payload.includes(todo.id)
+          !todo.isCompleted
+      );
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addTodo, handleComplete } = todoListSlice.actions;
+export const {
+  addTodo,
+  handleComplete,
+  setEdit,
+  handleEdit,
+  removeCompletedTodos,
+} = todoListSlice.actions;
 
 export default todoListSlice.reducer;
